@@ -14,6 +14,10 @@ dnf5 install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(
 dnf5 install -y tmux 
 dnf5 install -y VirtualBox
 
+akmods --force --kernels "${KERNEL}" --kmod VirtualBox
+modinfo /usr/lib/modules/"${KERNEL}"/extra/VirtualBox/{vboxdrv,vboxnetadp,vboxnetflt}.ko.xz > /dev/null \
+|| (find /var/cache/akmods/VirtualBox/ -name \*.log -print -exec cat {} \; && exit 1)
+
 # Use a COPR Example:
 #
 # dnf5 -y copr enable ublue-os/staging
