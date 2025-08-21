@@ -25,7 +25,7 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     /ctx/build.sh && \
     ostree container commit
 
-COPY --from=ghcr.io/ublue-os/akmods-extra:main /rpms/ /tmp/rpms
+COPY --from=ghcr.io/ublue-os/akmods-extra:main-42 /rpms/ /tmp/rpms
 RUN dnf install /tmp/rpms/kmods/kmod-VirtualBox*.rpm
 
     ### LINTING
