@@ -24,6 +24,16 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=tmpfs,dst=/tmp \
     /ctx/build.sh && \
     ostree container commit
+
+COPY --from=ghcr.io/ublue-os/akmods:${KERNEL_FLAVOR}-${FEDORA_VERSION}-${KERNEL_VERSION} / /tmp/akmods-common
+RUN find /tmp/akmods-common
+COPY --from=ghcr.io/ublue-os/akmods-extra:${KERNEL_FLAVOR}-${FEDORA_VERSION}-${KERNEL_VERSION} / /tmp/akmods-extra
+RUN find /tmp/akmods-extra
+## optionally install remove old and install new kernel
+# dnf -y remove --no-autoremove kernel kernel-core kernel-modules kernel-modules-core kernel-modules-extra
+## install ublue support package and desired kmod(s)
+RUN dnf install /tmp/rpms/ublue-os/ublue-os-akmods*.rpm
+RUN dnf install /tmp/rpms/kmods/kmod-VirtualBox*.rpm
     
 ### LINTING
 ## Verify final image and contents are correct.
